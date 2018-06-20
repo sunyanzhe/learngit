@@ -134,6 +134,46 @@ $ git reflog
     把本地库的内容推送到远程,用git push命令,实际上是把当前分支master推送到远程
     由于远程库是空的,我们第一次推送master分支时,加上了-u参数,Git不但会把本地的master分支内容推送的远程新的master分支,还会把本地的master分支和远程master分支关联起来,在以后的推送或者拉取是就可以简化命令
 
+    从现在起,只要本地做了提交,就可以通过命令:
+    
+    $ git push origin master
+
+    把本地master分支的最新修改推送至GitHub,现在,就拥有了真正的分布式版本库
+
+    SSH警告
+    当第一次使用Git的clone或者push命令链接GitHub时,会得到一个警告
+    The authenticity of host 'github.com (xx.xx.xx.xx)' can't be established.
+    RSA key fingerprint is xx.xx.xx.xx.xx.
+    Are you sure you want to continue connecting (yes/no)?
+
+    这是因为Git使用SSH链接,而SSH链接在第一次验证GitHub服务器的Key时,需要你确认GitHub的Key的指纹信息是否真的来自GitHub服务器,输入yes回车即可
+    Git会输出一个警告,告诉你已经把GitHub的Key添加到本机的一个信任列表里了:
+    Warning:Permanently added 'github.com' (RSA) to the list of know hosts.
+
+    这个警告只会出现一次,后面的操作就不会有任何警告了
+    如果你是在担心有人冒充GitHub服务器,输入yes前可以对照GitHub的RSA key的指纹信息是否与SSH链接给出的一致
+    
+    小结
+        1.要关联一个远程库,使用命令 $ git remote add origin git@[server-name;path/repo-name.git];
+        2.关联后,使用命令 $ git push -u origin master第一次推送master分支的所有内容
+        3.此后,每次本地提交后,只要有必要,就可以使用命令git push origin master推送最新修改;
+        4.分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在,也就是有没有联网都可以正常工作.
+
+从远程库克隆
+    假设从零开发,那么最好的方式是先创建远程库,然后从远程库克隆
+    首先,登录GitHub,创建一个新的仓库,名字叫gitskills;
+    现在,远程库已经准备哦好了,下一步使用命令$ git clone克隆一个本地库:
+    $ git clone [url]
+    Cloning into 'gitskills'...
+    remote: Counting objects: 3, done.
+    remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 3
+    Receiving objects: 100% (3/3), done
+
+    注意,把Git库的地址换成你自己的,然后进入gitskills目录看看,
+    $ cd gitskills
+    $ ls
+        目录
+
 
 
 
