@@ -1,3 +1,3 @@
-hello
-comment
-author
+hello,
+comment,
+author,
