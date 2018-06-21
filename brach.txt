@@ -524,7 +524,79 @@ Rebase
 
   总之看上去很乱,Git有一种成为rebase的操作,翻译成"变基",可以将git的提交历史变成一条干净的直线
   在和远程分支同步后,我们对hello.py这个文件做了两次提交.
+  现在我们尝试推送本地分支：
 
-    
+  $ git push origin master
+  To github.com:michaelliao/learngit.git
+  ! [rejected]        master -> master (fetch first)
+  error: failed to push some refs to 'git@github.com:michaelliao/learngit.git'
+  hint: Updates were rejected because the remote contains work that you do
+  hint: not have locally. This is usually caused by another repository pushing
+  hint: to the same ref. You may want to first integrate the remote changes
+  hint: (e.g., 'git pull ...') before pushing again.
+  hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
+  很不幸，失败了，这说明有人先于我们推送了远程分支。按照经验，先pull一下：
+  $ git pull
+  remote: Counting objects: 3, done.
+  remote: Compressing objects: 100% (1/1), done.
+  remote: Total 3 (delta 1), reused 3 (delta 1), pack-reused 0
+  Unpacking objects: 100% (3/3), done.
+  From github.com:michaelliao/learngit
+    d1be385..f005ed4  master     -> origin/master
+  * [new tag]         v1.0       -> v1.0
+  Auto-merging hello.py
+  Merge made by the 'recursive' strategy.
+  hello.py | 1 +
+  1 file changed, 1 insertion(+)
+  
+  再用git status看看状态：
+  $ git status
+  On branch master
+  Your branch is ahead of 'origin/master' by 3 commits.
+    (use "git push" to publish your local commits)
 
+  nothing to commit, working tree clean
+
+  加上刚才合并的提交，现在我们本地分支比远程分支超前3个提交。
+  用git log看看：
+  $ git log --graph --pretty=oneline --abbrev-commit
+  *   e0ea545 (HEAD -> master) Merge branch 'master' of github.com:michaelliao/learngit
+  |\  
+  | * f005ed4 (origin/master) set exit=1
+  * | 582d922 add author
+  * | 8875536 add comment
+  |/  
+  * d1be385 init hello
+  ...
+
+  这个时候，使用rebase.输入命令git rebase：
+  $ git rebase
+  First, rewinding head to replay your work on top of it...
+  Applying: add comment
+  Using index info to reconstruct a base tree...
+  M    hello.py
+  Falling back to patching base and 3-way merge...
+  Auto-merging hello.py
+  Applying: add author
+  Using index info to reconstruct a base tree...
+  M    hello.py
+  Falling back to patching base and 3-way merge...
+  Auto-merging hello.py
+
+  输出了一大堆操作，到底是啥效果？再用git log看看：
+  $ git log --graph --pretty=oneline --abbrev-commit
+  * 7e61ed4 (HEAD -> master) add author
+  * 3611cfe add comment
+  * f005ed4 (origin/master) set exit=1
+  * d1be385 init hello
+  ...
+
+  原本分叉的提交现在变成一条直线了！这种神奇的操作是怎么实现的？其实原理非常简单。
+  我们注意观察，发现Git把我们本地的提交“挪动”了位置，放到了f005ed4 (origin/master) set exit=1之后，这样，整个提交历史就成了一条直线。
+  rebase操作前后，最终的提交内容是一致的，但是，我们本地的commit修改内容已经变化了，它们的修改不再基于d1be385 init hello，
+  而是基于f005ed4 (origin/master) set exit=1，但最后的提交7e61ed4内容是一致的。
+
+  这就是rebase操作的特点：把分叉的提交历史“整理”成一条直线，看上去更直观。缺点是本地的分叉提交已经被修改过了。
+  最后，通过push操作把本地分支推送到远程：
+  $ git push origin master
