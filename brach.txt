@@ -499,7 +499,32 @@ Feature分支
       4.在本地创建和远程分支对应的分支,使用 git checkout -b [branch-name] origin/[branch-name],本地和远程分支的名称最好一致;
       5.建立本地分支和远程分支的关联,使用 git branch --set-upstream-to=origin/[branch-name] [branch-name];
       6.从远程抓取分支,使用git pull,如果有冲突,要先处理冲突
-      
+
+Rebase
+  多人在同一分支上协作时,很容易出现冲突,即使没有冲突,后push的同学也不得不先pull,在本地合并,然后才能push成功,每次合并在push后,分支变成了这样
+  $ git log --graph --pretty=oneline --abbrev-commit
+  * d1be385 (HEAD -> master, origin/master) init hello
+  *   e5e69f1 Merge branch 'dev'
+  |\  
+  | *   57c53ab (origin/dev, dev) fix env conflict
+  | |\  
+  | | * 7a5e5dd add env
+  | * | 7bd91f1 add new env
+  | |/  
+  * |   12a631b merged bug fix 101
+  |\ \  
+  | * | 4c805e2 fix bug 101
+  |/ /  
+  * |   e1e9c68 merge with no-ff
+  |\ \  
+  | |/  
+  | * f52c633 add merge
+  |/  
+  *   cf810e4 conflict fixed
+
+  总之看上去很乱,Git有一种成为rebase的操作,翻译成"变基",可以将git的提交历史变成一条干净的直线
+  在和远程分支同步后,我们对hello.py这个文件做了两次提交.
+
     
 
 
