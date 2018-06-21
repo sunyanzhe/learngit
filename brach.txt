@@ -390,6 +390,33 @@ Feature分支
 
   终于删除成功
 
+多人协作
+  当你从远程仓库克隆时,实际上Git自动把本地的master分支和远程的master分支对应起来了,并且,远程仓库的默认名称是origin
+  要查看远程库的信息,用git remote:
+    $ git remote
+    origin
+  或者,用git remote -v显示更详细的信息:
+    $ git remote -v
+    origin  https://github.com/sunyanzhe/learngit.git (fetch)
+    origin  https://github.com/sunyanzhe/learngit.git (push)
+
+  上面显示了抓取和推送的origin的地址.如果没有推送权限,就看不到push的地址
+
+  推送分支
+    
+    推送分支,就是把该分支的所有本地提交到远程库.推送时,要制定本地分支,这样,Git就会把该分支推送到远程库对应的远程分支上:
+      $ git push origin master
+    如果要推送其他分支,比如dev,就改成:
+      $ git push origin dev
+    
+    但是,并不是一定要把本地分支网远程推送,那么,那些分支需要推送,那些不需要呢
+      1.master分支是主分支,因此要时刻与远程同步
+      2.dev分支是开发分支,团队所有成员都需要在上面工作,所以也需要与远程同步;
+      3.bug分支只用于在本地修复bug,就没必要推送远程了,除非老板要看你每周修复了几个bug;
+      4.feature分支是否推到远程,取决于你是否和你的小伙伴合作在上面开发
+    
+    总之,就是在Git中,分支完全可以在本地自己藏着玩,是否推送,视心情而定
+    
 
 
 
