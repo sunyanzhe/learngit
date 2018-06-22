@@ -137,6 +137,7 @@
                                 -------------------       
                                 | local/bootstrap |       
                                 -------------------
+
     如果你想修复bootstrap的一个bug,或者新增一个功能,立刻就可以开始干活,干完后,往自己的仓库推送.
     如果你希望bootstrap的官方库能接受你的修改,你就可以在GitHub上发起一个pull request.当然,对方是否接受你的pull request就不一定了
     
@@ -144,4 +145,21 @@
         1.在GitHub上,可以任意Fork开源仓库
         2.自己拥有Fork后的仓库的读写权限
         3.可以推送pull request给官方仓库来贡献代码
-        
+
+本地库与远程库关联  
+    使用git remote add origin git@XXX.com.XXX/xxx.git
+    之后,就可以正常地用git push和git pull推送了
+    如果在使用命令 git remote add时报错:
+    fatal:remote origin already exists.
+
+    这说明本地库已经关联了一个名叫origin的远程库,此时,可以先用git remote -v查看远程库信息:
+    git remote -v
+    origin    git@github.com:sunyanzhe/learngit.git (fetch)
+    origin    git@github.com:sunyanzhe/learngit.git (push)
+
+    可以看到,本地库已经关联了origin的远程库,并且,该远程库指向GitHub
+    我们可以删除已有的GitHub远程库:
+    $ git remote rm origin
+
+    在关联码云的远程库(注意路径中需要填写正确的用户名):
+    git remote add gitee git@gitee.com:sunyz/learngit.git
